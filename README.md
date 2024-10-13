@@ -1,2 +1,2 @@
 # svgfw
-Personal framework for Node.js projects (WIP)
+Personal framework for JavaScript backend projects (WIP)

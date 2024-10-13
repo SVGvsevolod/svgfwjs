@@ -1,8 +1,10 @@
 {
-    "main": "lib/index.js",
+    "private": true,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SVGvsevolod/svgfw.git"
+        "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
     },
-    "type": "module"
+    "workspaces": [
+        "packages/*"
+    ]
 }

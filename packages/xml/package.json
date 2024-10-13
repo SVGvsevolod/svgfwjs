@@ -1,0 +1,12 @@
+{
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "main": "src/index.js",
+    "name": "@svgfwjs/xml",
+    "repository": {
+        "directory": "packages/xml",
+        "type": "git",
+        "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
+    }
+}
