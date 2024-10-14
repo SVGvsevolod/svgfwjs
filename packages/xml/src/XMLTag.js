@@ -3,11 +3,12 @@
  * @constructor
  * @prop {object} XMLTag.prototype.attr Node attributes
  * @prop {string[]|XMLTag[]} XMLTag.prototype.content
+ * @prop {boolean} XMLTag.prototype.hasContent
  * @prop {string} XMLTag.prototype.name
  * @func XMLTag.prototype.toString() Renders Node in XML syntax
  * @param {object} opts Set Node's initial data
  * @example
- * import { XMLTag } from 'svgfwjs/xml'
+ * import { XMLTag } from '@svgfwjs/xml'
  * 
  * // Create a new XML element
  * let your_element = new XMLTag({
@@ -81,6 +82,13 @@ function XMLTag(opts) {
                 ? opts.content
                 : undefined
         },
+        _hasContent: {
+            configurable: true,
+            value: 'object' == typeof opts
+                && !opts.hasContent
+                ? !!opts.hasContent
+                : true
+        },
         _name: {
             configurable: true,
             value: 'object' == typeof opts
@@ -141,34 +149,36 @@ var a = 'Name cannot start with "XML".',
     l = function(a) {
     var b = ''
     Object.keys(a).forEach(function(c) {
-        b += ' ' + c + '="' + a[c] + '"'
+        if (/^[a-zA-Z1-9-_:.]+$/.test(c) && '' + a[c]) {
+            d = ('' + a[c]).indexOf('"') > -1 ? '\'' : '"'
+            b += ' ' + c + '=' + d + a[c] + d
+        }
     })
     return b
 }
 
 Object.defineProperties(XMLTag.prototype, {
-    /**
-     * @prop {object} XMLTag.prototype.attr Node attributes
-     */
     attr: {
         get: i
     },
-    /**
-     * @prop {object} XMLTag.prototype.attributes Alias to `XMLTag.prototype.attr`
-     */
     attributes: {
         get: i
     },
-    /**
-     * @prop {string[]|XMLTag[]} XMLTag.prototype.content
-     */
     content: {
         get: g,
         set: h
     },
-    /**
-     * @prop {string} XMLTag.prototype.name
-     */
+    hasContent: {
+        get: function get() {
+            return this._hasContent
+        },
+        set: function set(a) {
+            Object.defineProperty(this, '_hasContent', {
+                configurable: true,
+                value: !!a
+            })
+        }
+    },
     name: {
         get: function get() {
             return this._name
@@ -186,41 +196,32 @@ Object.defineProperties(XMLTag.prototype, {
                 })
         }
     },
-    /**
-     * @prop {object} XMLTag.prototype.props Alias to `XMLTag.prototype.attr`
-     */
     props: {
         get: i
     },
-    /**
-     * @prop {object} XMLTag.prototype.properties Alias to `XMLTag.prototype.attr`
-     */
     properties: {
         get: i
     },
-    /**
-     * @prop {string[]|XMLTag[]} XMLTag.prototype.text Alias to `XMLTag.prototype.content`
-     */
     text: {
         get: g,
         set: h
     },
-    /**
-     * @func XMLTag.prototype.toString() Renders Node in XML syntax
-     */
     toString: {
         value: function toString() {
             if (!this.name)
                 throw new Error('Name cannot be empty.')
             else
                 return '<' + this.name
-                    + l(this.attr) + '>'
-                    + (this.content 
-                        ? this.content instanceof Array
-                            ? k(this.content)
-                            : j(this.content)
-                        : '')
-                    + '</' + this.name + '>'
+                    + l(this.attr)
+                    + (this.hasContent
+                        ? '>'
+                        + (this.content 
+                            ? this.content instanceof Array
+                                ? k(this.content)
+                                : j(this.content)
+                            : '')
+                        + '</' + this.name + '>'
+                        : '/>')
         }
     }
 })
