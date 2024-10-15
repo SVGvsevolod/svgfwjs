@@ -4,6 +4,21 @@
  * @prop {string} XMLTag.prototype.content
  * @func XMLTag.prototype.toString() Renders Node in XML syntax
  * @param {object} opts Set Node's initial data
+ * @example
+ * import { XMLCom } from '@svgfwjs/xml'
+ * 
+ * // Create a new XML comment
+ * let your_comment = new XMLCom({
+ *  content: 'Cool comment'
+ * })
+ * 
+ * // Edit comment text whenever needed
+ * your_comment.content = 'Cooler comment'
+ * 
+ * // Render as XML code
+ * console.log(your_comment.toString())
+ * // or
+ * console.log('' + your_comment)
  */
 function XMLCom(opts) {
     if (!(this instanceof XMLCom))

@@ -1,0 +1,1 @@
+module.exports.a = 'This constructor must be invoked with a keyword "new".'
