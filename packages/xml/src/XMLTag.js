@@ -36,36 +36,18 @@
  */
 function XMLTag(opts) {
     if (!(this instanceof XMLTag))
-        throw new Error('This constructor must be invoked with a keyword "new".')
-    if ('object' == typeof opts && opts.name) {
-        opts.name = e(opts.name)
-        if (opts.name && c(opts.name)) {
-            console.warn(a)
-            opts.name = ''
-        }
-        if (opts.name && d(opts.name)) {
-            console.warn(b)
-            opts.name = ''
-        }
-    }
+        throw new Error(require('./common').a)
+    if ('object' == typeof opts && opts.name)
+        opts.name = require('./common').h(opts.name)
     if ('object' == typeof opts && (opts.content || opts.text))
-        opts.content = f(opts.content || opts.text)
+        opts.content = a(opts.content || opts.text)
     if ('object' == typeof opts
-        && 'object' == typeof opts.attr
-        || 'object' == typeof opts.props
-        || 'object' == typeof opts.attributes
-        || 'object' == typeof opts.properties) {
+     && 'object' == typeof opts.attr
+     || 'object' == typeof opts.props
+     || 'object' == typeof opts.attributes
+     || 'object' == typeof opts.properties) {
         opts.attr = opts.attr || opts.props || opts.attributes || opts.properties
-        if ('object' == typeof opts.attr)
-            Object.keys(opts.attr).forEach(function(a) {
-                var b = opts.attr[a]
-                opts.attr[a] = {
-                    configurable: true,
-                    enumerable: true,
-                    value: b,
-                    writable: true
-                }
-            })
+        require('./common').i(opts.attr)
     }
     Object.defineProperties(this, {
         _attr: {
@@ -99,37 +81,25 @@ function XMLTag(opts) {
     })
 }
 
-var a = 'Name cannot start with "XML".',
-    b = 'Name must start with a letter or underscore.',
-    c = function(a) {
-    return 0 == a.toLowerCase().indexOf('xml')
-},
-    d = function(a) {
-    return !/[a-zA-Z_]/.test(a)
-},
-    e = function(a) {
-    a = '' + a
-    return a.replaceAll(' ', '')
-},
-    f = function(a) {
+var a = function(a) {
     return a instanceof Array
         || a instanceof XMLTag
         ? a 
         : '' + a
 },
-    g = function get() {
+    b = function get() {
     return this._content
 },
-    h = function set(a) {
+    c = function set(a) {
     Object.defineProperty(this, '_content', {
         configurable: true,
-        value: f(a)
+        value: a(a)
     })
 },
-    i = function get() {
+    d = function get() {
     return this._attr
 },
-    j = function(a) {
+    e = function(a) {
     return a
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
@@ -137,20 +107,20 @@ var a = 'Name cannot start with "XML".',
         .replaceAll('"', '&quot;')
         .replaceAll('\'', '&apos;')
 },
-    k = function(a) {
+    f = function(a) {
     var b = ''
     for (var c in a)
         if (a[c] instanceof Array)
-            b += k(a[c])
+            b += f(a[c])
         else
-            b += '' + (a[c] instanceof XMLTag ? a[c] : j(a[c]))
+            b += '' + (a[c] instanceof XMLTag ? a[c] : e(a[c]))
     return b
 },
-    l = function(a) {
+    g = function(a) {
     var b = ''
     Object.keys(a).forEach(function(c) {
         if (/^[a-zA-Z1-9-_:.]+$/.test(c) && '' + a[c]) {
-            d = ('' + a[c]).indexOf('"') > -1 ? '\'' : '"'
+            var d = ('' + a[c]).indexOf('"') > -1 ? '\'' : '"'
             b += ' ' + c + '=' + d + a[c] + d
         }
     })
@@ -159,14 +129,14 @@ var a = 'Name cannot start with "XML".',
 
 Object.defineProperties(XMLTag.prototype, {
     attr: {
-        get: i
+        get: d
     },
     attributes: {
-        get: i
+        get: d
     },
     content: {
-        get: g,
-        set: h
+        get: b,
+        set: c
     },
     hasContent: {
         get: function get() {
@@ -183,42 +153,42 @@ Object.defineProperties(XMLTag.prototype, {
         get: function get() {
             return this._name
         },
-        set: function set(f) {
-            f = e(f)
-            if (c(f))
-                throw new Error(a)
-            else if (d(f[0]))
-                throw new Error(b)
+        set: function set(a) {
+            a = require('./common').g(a)
+            if (require('./common').e(a))
+                throw new Error(require('./common').b)
+            else if (require('./common').f(a[0]))
+                throw new Error(require('./common').c)
             else
                 Object.defineProperty(this, '_name', {
                     configurable: true,
-                    value: f
+                    value: a
                 })
         }
     },
     props: {
-        get: i
+        get: d
     },
     properties: {
-        get: i
+        get: d
     },
     text: {
-        get: g,
-        set: h
+        get: b,
+        set: c
     },
     toString: {
         value: function toString() {
             if (!this.name)
-                throw new Error('Name cannot be empty.')
+                throw new Error(require('./common').d)
             else
                 return '<' + this.name
-                    + l(this.attr)
+                    + g(this.attr)
                     + (this.hasContent
                         ? '>'
                         + (this.content 
                             ? this.content instanceof Array
-                                ? k(this.content)
-                                : j(this.content)
+                                ? f(this.content)
+                                : e(this.content)
                             : '')
                         + '</' + this.name + '>'
                         : '/>')

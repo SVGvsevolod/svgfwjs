@@ -22,7 +22,7 @@
  */
 function XMLCom(opts) {
     if (!(this instanceof XMLCom))
-        throw new Error('This constructor must be invoked with a keyword "new".')
+        throw new Error(require('./common').a)
     if ('object' == typeof opts && (opts.content || opts.text))
         opts.content = '' + (opts.content || opts.text)
     Object.defineProperty(this, '_content', {
