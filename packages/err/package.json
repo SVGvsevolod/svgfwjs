@@ -1,0 +1,15 @@
+{
+    "author": "Vsevolod S.V.G Subbotkin",
+    "browser": "err.min.js",
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "module": "err.es.js",
+    "name": "@svgfwjs/err",
+    "repository": {
+        "directory": "packages/err",
+        "type": "git",
+        "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
+    },
+    "version": "1.0.0"
+}

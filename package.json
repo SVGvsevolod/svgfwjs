@@ -4,6 +4,7 @@
         "type": "git",
         "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
     },
+    "type": "module",
     "workspaces": [
         "packages/*"
     ]
