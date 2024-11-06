@@ -8,6 +8,19 @@ if (window)
          * @param {object|string} opts or name of the file
          * @param {number} line in the file
          * @returns {Error}
+         * @example
+         * <script src="https://svg.moe/js/err.js"></script>
+         * <script>
+         * function yourCoolFunction() {
+         *     if ( somethingIncorrect )
+         *         throw svgfwjs.err('You did it wrong!', yourCoolFunction)
+         * }
+         * 
+         * yourCoolFunction()
+         * // Will result as following:
+         * // Uncaught Error: You did it wrong!
+         * //     at index.html:13:1
+         * </script>
          */
         err: function(msg, caller, type, opts, line) {
             'use strict'

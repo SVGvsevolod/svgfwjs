@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Creates and returns an `Error` instance and reduces the stack trace to function that throws that `Error` instance.
  * @param {string} msg of `Error` to output/display
@@ -23,10 +21,4 @@
  * // Error: You did it wrong!
  * //     at file:///.../yourCoolScript.js:8:1
  */
-module.exports.err = function err(msg, caller, type, opts) {
-    type = 'function' == typeof type ? type : Error
-    var a = type(msg, opts)
-    if ('function' == typeof Error.captureStackTrace && 'function' == typeof caller)
-        Error.captureStackTrace(a, caller)
-    return a
-}
+export declare function err(msg?: string, caller?: Function, type?: Error, opts?: object): Error
