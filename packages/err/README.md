@@ -17,9 +17,11 @@ err('Error Message.', callerFunction, ErrorType, optionsOrFileName, lineNumber)
 
 - `callerFunction` is the function that throws an error which is used for stack trace reduction
 - `ErrorType` is the type of error that was chosen to be thrown.
-It should any of [`Error` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#error_types) that exists in JavaScript.
+
+It should be any of [`Error` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#error_types) that exists in JavaScript or it may be own custom `Error`.
 - `optionsOrFileName` - this argument is being passed to [`Error` constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Error#options) alongside with `'Error Message.'`. It can be object that has `cause` property/key or string that is path to the file.
 - `lineNumber` is the number of the line in the file (which also is being passed to `Error` constructor)
+
 **The thing is:** file name and line number parameters/arguments are mostly usable in certain web browsers. Node and other alike runtime enviroments doesn't use those parameters/arguments.
 
 All parameters/arguments are optional, just like in `Error` constructor.
