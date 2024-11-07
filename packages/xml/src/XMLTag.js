@@ -1,3 +1,52 @@
+'use strict'
+
+function XMLTag(opts) {
+    if (!(this instanceof XMLTag))
+        return new XMLTag(opts)
+    opts = 'object' == typeof opts ? opts : Object.create(null)
+    Object.defineProperties(this, {
+        name: {
+            configurable: true,
+            value: 'string' == typeof opts.name
+                || opts.name
+                ? require('./common').c(opts.name, XMLTag)
+                : ''
+        }
+    })
+}
+
+var a = function() {
+    
+},
+    b = function set(a) {
+    console.log(require('./common').c(a, b))
+    Object.defineProperty(this, '_name', {
+        configurable: true,
+        value: require('./common').c(a, b)
+    })
+}
+
+Object.defineProperties(XMLTag.prototype, {
+    name: {
+        get: function() {
+            return this._name
+        },
+        set: b
+    },
+    toJSON: {
+        value: function() {
+            return 'a'
+        }
+    },
+    [require('node:util').inspect.custom]: {
+        value: function() {
+            return 'a'
+        }
+    }
+})
+
+module.exports = XMLTag
+
 /**
  * Represents an XML Node as JS object, allows to modify its data and renders in XML syntax.
  * @constructor
@@ -34,18 +83,18 @@
  * // or
  * console.log('' + your_element)
  */
-function XMLTag(opts) {
+/*function XMLTag(opts) {
     if (!(this instanceof XMLTag))
-        throw new Error(require('./common').a)
+        return new XMLTag(opts)
     if ('object' == typeof opts && opts.name)
         opts.name = require('./common').h(opts.name)
     if ('object' == typeof opts && (opts.content || opts.text))
         opts.content = a(opts.content || opts.text)
     if ('object' == typeof opts
-     && 'object' == typeof opts.attr
+     && ('object' == typeof opts.attr
      || 'object' == typeof opts.props
      || 'object' == typeof opts.attributes
-     || 'object' == typeof opts.properties) {
+     || 'object' == typeof opts.properties)) {
         opts.attr = opts.attr || opts.props || opts.attributes || opts.properties
         require('./common').i(opts.attr)
     }
@@ -179,7 +228,7 @@ Object.defineProperties(XMLTag.prototype, {
     toString: {
         value: function toString() {
             if (!this.name)
-                throw new Error(require('./common').d)
+                throw require('@svgfwjs/err').err(require('./common').d, XMLTag.prototype.toString)
             else
                 return '<' + this.name
                     + g(this.attr)
@@ -196,4 +245,4 @@ Object.defineProperties(XMLTag.prototype, {
     }
 })
 
-module.exports = XMLTag
+module.exports = XMLTag*/

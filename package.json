@@ -6,8 +6,5 @@
         "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
     },
     "type": "module",
-    "version": "0.0.1",
-    "workspaces": [
-        "packages/*"
-    ]
+    "version": "0.0.1"
 }

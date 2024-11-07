@@ -1,7 +1,36 @@
-module.exports.a = 'This constructor must be invoked with a keyword "new".'
-module.exports.b = 'Name cannot start with "XML".'
-module.exports.c = 'Name must start with a letter or underscore.'
-module.exports.d = 'Name cannot be empty.'
+'use strict'
+
+module.exports.a = function(a, b) {
+    var b = require('@svgfwjs/err').err(a, b)
+    throw b
+}
+
+module.exports.b = function(a) {
+    var b = '[!] ' + a
+    console.warn(b)
+}
+
+module.exports.c = function(a, b) {
+    a = '' + a
+    if (!a.toLowerCase().indexOf('xml')) {
+        module.exports.b(a + ' - Name cannot start with "XML".')
+        a = a.substring(3)
+    }
+    if (!a)
+        module.exports.a(a + ' - Name cannot be empty.', b)
+    if (a.indexOf(' ') >- 1) {
+        module.exports.b(a + ' - Name cannot contain spaces.')
+        a = a.replaceAll(' ', '')
+    }
+    if (!/^[a-zA-Z0-9-_.:]*$/.test(a))
+        module.exports.a(a + ' - Name contain forbidden characters.', b)
+    return a
+}
+
+/*module.exports.a = 'This constructor must be invoked with a keyword "new".'
+module.exports.b = ''
+module.exports.c = ''
+module.exports.d = ''
 module.exports.e = function(a) {
     return 0 == a.toLowerCase().indexOf('xml')
 }
@@ -34,4 +63,4 @@ module.exports.i = function(a) {
             writable: true
         }
     })
-}
+}*/
