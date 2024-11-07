@@ -10,7 +10,19 @@ module.exports.b = function(a) {
     console.warn(b)
 }
 
-module.exports.c = function(a, b, c) {
+module.exports.c = function(a) {
+    Object.keys(a).forEach(function(b) {
+        var c = a[b]
+        a[b] = {
+            configurable: true,
+            enumerable: true,
+            value: c,
+            writable: true
+        }
+    })
+}
+
+module.exports.d = function(a, b, c) {
     a = '' + a
     if (b && !a.toLowerCase().indexOf('xml')) {
         module.exports.b(a + ' - Name cannot start with "XML".')
@@ -25,16 +37,4 @@ module.exports.c = function(a, b, c) {
     if (!/^[a-zA-Z0-9-_:.]*$/.test(a))
         module.exports.a(a + ' - Name contain forbidden characters.', c)
     return a
-}
-
-module.exports.d = function(a) {
-    Object.keys(a).forEach(function(b) {
-        var c = a[b]
-        a[b] = {
-            configurable: true,
-            enumerable: true,
-            value: c,
-            writable: true
-        }
-    })
 }

@@ -5,6 +5,14 @@ function XMLTag(name, content, attr) {
         return new XMLTag(name, content, attr)
     name = 'string' == typeof name ? name : ''
     Object.defineProperties(this, {
+        _attr: {
+            configurable: !0,
+            value: Object.create(null, require('./common').c(
+                'object' == typeof attr
+                    ? attr
+                    : Object.create(null)
+                ))
+        },
         _content: {
             configurable: !0,
             value: a(content)
@@ -12,12 +20,12 @@ function XMLTag(name, content, attr) {
         _empty: {
             configurable: !0,
             value: 'number' != typeof content 
-                || 'string' != typeof content
-                || !content
+                && 'string' != typeof content
+                && !content
         },
         _name: {
             configurable: !0,
-            value: require('./common').c(name, !0, XMLTag)
+            value: require('./common').d(name, !0, XMLTag)
         }
     })
 }
@@ -29,62 +37,92 @@ var a = function(a) {
         ? a
         : '' + a
 },
-    b = function set(a) {
-    Object.defineProperty(this, '_name', {
-        configurable: !0,
-        value: require('./common').c(a, !0, b)
-    })
+    b = {
+    get name() {
+        return this._name
+    },
+    set name(a) {
+        Object.defineProperty(this, '_name', {
+            configurable: !0,
+            value: require('./common').d(a, !0, b)
+        })
+    }
 },
-    c = function get() {
-    return this._content
+    c = {
+    get content() {
+        return this._content
+    },
+    set content(b) {
+        Object.defineProperty(this, '_content', {
+            configurable: !0,
+            value: a(b)
+        })
+    }
 },
-    d = function set(b) {
-    Object.defineProperty(this, '_content', {
-        configurable: !0,
-        value: a(b)
-    })
+    e = {
+    get empty() {
+        return this._empty
+    },
+    set empty(a) {
+        Object.defineProperty(this, '_empty', {
+            configurable: !0,
+            value: !!a
+        })
+    }
+},
+    f = {
+    get attr() {
+        return this._attr
+    }
+},
+    g = {
+    [require('node:util').inspect.custom]: function() {
+        return this._str({ pretty: !0 })
+    }
 }
 
 Object.defineProperties(XMLTag.prototype, {
-    [require('node:util').inspect.custom]: {
-        value: function() {
-            return this._str()
-        }
-    },
     _str: {
         value: function _str(a) {
             a = 'object' == typeof a ? a : Object.create(null)
             return 'ab'
         }
     },
+    attr: {
+        get: Object.getOwnPropertyDescriptor(f, 'attr').get
+    },
+    attributes: {
+        get: Object.getOwnPropertyDescriptor(f, 'attr').get
+    },
     content: {
-        get: c,
-        set: d
+        get: Object.getOwnPropertyDescriptor(c, 'content').get,
+        set: Object.getOwnPropertyDescriptor(c, 'content').set
     },
     empty: {
-        get: function get() {
-            return this._empty
-        },
-        set: function set(a) {
-            Object.defineProperty(this, '_empty', {
-                configurable: !0,
-                value: !!a
-            })
-        }
+        get: Object.getOwnPropertyDescriptor(e, 'empty').get,
+        set: Object.getOwnPropertyDescriptor(e, 'empty').set
     },
     name: {
-        get: function get() {
-            return this._name
-        },
-        set: a
+        get: Object.getOwnPropertyDescriptor(b, 'name').get,
+        set: Object.getOwnPropertyDescriptor(b, 'name').set
+    },
+    props: {
+        get: Object.getOwnPropertyDescriptor(f, 'attr').get
+    },
+    properties: {
+        get: Object.getOwnPropertyDescriptor(f, 'attr').get
     },
     text: {
-        get: c,
-        set: d
+        get: Object.getOwnPropertyDescriptor(c, 'content').get,
+        set: Object.getOwnPropertyDescriptor(c, 'content').set
     },
     toJSON: {
         value: function toJSON() {
             return Object.create(null, {
+                attr: {
+                    enumerable: !0,
+                    value: this.attr
+                },
                 content: {
                     enumerable: !0,
                     value: this.content
@@ -104,6 +142,9 @@ Object.defineProperties(XMLTag.prototype, {
         value: function toString(a) {
             return this._str(a)
         }
+    },
+    [require('node:util').inspect.custom]: {
+        value: Object.getOwnPropertyDescriptor(g, require('node:util').inspect.custom).value
     }
 })
 
