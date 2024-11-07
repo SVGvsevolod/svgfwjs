@@ -1,46 +1,108 @@
 'use strict'
 
-function XMLTag(opts) {
+function XMLTag(name, content, attr) {
     if (!(this instanceof XMLTag))
-        return new XMLTag(opts)
-    opts = 'object' == typeof opts ? opts : Object.create(null)
+        return new XMLTag(name, content, attr)
+    name = 'string' == typeof name ? name : ''
     Object.defineProperties(this, {
-        name: {
-            configurable: true,
-            value: 'string' == typeof opts.name
-                || opts.name
-                ? require('./common').c(opts.name, XMLTag)
-                : ''
+        _content: {
+            configurable: !0,
+            value: a(content)
+        },
+        _empty: {
+            configurable: !0,
+            value: 'number' != typeof content 
+                || 'string' != typeof content
+                || !content
+        },
+        _name: {
+            configurable: !0,
+            value: require('./common').c(name, !0, XMLTag)
         }
     })
 }
 
-var a = function() {
-    
+var a = function(a) {
+    return 'number' == typeof a
+        || a instanceof Array
+        || a instanceof XMLTag
+        ? a
+        : '' + a
 },
     b = function set(a) {
-    console.log(require('./common').c(a, b))
     Object.defineProperty(this, '_name', {
-        configurable: true,
-        value: require('./common').c(a, b)
+        configurable: !0,
+        value: require('./common').c(a, !0, b)
+    })
+},
+    c = function get() {
+    return this._content
+},
+    d = function set(b) {
+    Object.defineProperty(this, '_content', {
+        configurable: !0,
+        value: a(b)
     })
 }
 
 Object.defineProperties(XMLTag.prototype, {
-    name: {
-        get: function() {
-            return this._name
-        },
-        set: b
-    },
-    toJSON: {
-        value: function() {
-            return 'a'
-        }
-    },
     [require('node:util').inspect.custom]: {
         value: function() {
-            return 'a'
+            return this._str()
+        }
+    },
+    _str: {
+        value: function _str(a) {
+            a = 'object' == typeof a ? a : Object.create(null)
+            return 'ab'
+        }
+    },
+    content: {
+        get: c,
+        set: d
+    },
+    empty: {
+        get: function get() {
+            return this._empty
+        },
+        set: function set(a) {
+            Object.defineProperty(this, '_empty', {
+                configurable: !0,
+                value: !!a
+            })
+        }
+    },
+    name: {
+        get: function get() {
+            return this._name
+        },
+        set: a
+    },
+    text: {
+        get: c,
+        set: d
+    },
+    toJSON: {
+        value: function toJSON() {
+            return Object.create(null, {
+                content: {
+                    enumerable: !0,
+                    value: this.content
+                },
+                empty: {
+                    enumerable: !0,
+                    value: this.empty
+                },
+                name: {
+                    enumerable: !0,
+                    value: this.name
+                }
+            })
+        }
+    },
+    toString: {
+        value: function toString(a) {
+            return this._str(a)
         }
     }
 })
