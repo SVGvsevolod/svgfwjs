@@ -22,19 +22,15 @@ module.exports.c = function(a) {
     })
 }
 
-module.exports.d = function(a, b, c) {
+module.exports.d = function(a, b) {
     a = '' + a
-    if (b && !a.toLowerCase().indexOf('xml')) {
-        module.exports.b(a + ' - Name cannot start with "XML".')
-        a = a.substring(3)
-    }
     if (!a)
-        module.exports.a(a + ' - Name cannot be empty.', c)
+        module.exports.a(a + ' - Name cannot be empty.', b)
     if (a.indexOf(' ') >- 1) {
         module.exports.b(a + ' - Name cannot contain spaces.')
         a = a.replaceAll(' ', '')
     }
     if (!/^[a-zA-Z0-9-_:.]*$/.test(a))
-        module.exports.a(a + ' - Name contain forbidden characters.', c)
+        module.exports.a(a + ' - Name contain forbidden characters.', b)
     return a
 }

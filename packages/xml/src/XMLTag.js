@@ -25,7 +25,7 @@ function XMLTag(name, content, attr) {
         },
         _name: {
             configurable: !0,
-            value: require('./common').d(name, !0, XMLTag)
+            value: require('./common').d(name, XMLTag)
         }
     })
 }
@@ -44,7 +44,7 @@ var a = function(a) {
     set name(a) {
         Object.defineProperty(this, '_name', {
             configurable: !0,
-            value: require('./common').d(a, !0, b)
+            value: require('./common').d(a, Object.getOwnPropertyDescriptor(b, 'name').set)
         })
     }
 },
