@@ -2,16 +2,19 @@
 
 function XMLTag(name, content, attr) {
     if (!(this instanceof XMLTag))
-        return new XMLTag(name, content, attr)
-    name = 'string' == typeof name ? name : ''
+        try {
+            return new XMLTag(name, content, attr)
+        } catch (a) {
+            require('./common').a(a.message, XMLTag)
+        }
+    var b = 'object' == typeof name ? name : void 0
+    attr = (b ? b.attr || b.attributes || b.props || b.properties : attr) || {}
+    content = b ? b.content || b.text : content
+    name = (b ? b.name : name) || ''
     Object.defineProperties(this, {
         _attr: {
             configurable: !0,
-            value: Object.create(null, require('./common').c(
-                'object' == typeof attr
-                    ? attr
-                    : Object.create(null)
-                ))
+            value: Object.create(null, require('./common').c(attr))
         },
         _content: {
             configurable: !0,
@@ -19,9 +22,14 @@ function XMLTag(name, content, attr) {
         },
         _empty: {
             configurable: !0,
-            value: 'number' != typeof content 
-                && 'string' != typeof content
-                && !content
+            value: b 
+                ? !b.empty
+                    || ('number' != typeof b.content 
+                    && 'string' != typeof b.content
+                    && !b.content)
+                : 'number' != typeof content 
+                    && 'string' != typeof content
+                    && !content
         },
         _name: {
             configurable: !0,
@@ -36,7 +44,13 @@ var a = function(a) {
         || a instanceof XMLTag
         ? a
         : '' + a
-},
+}
+
+Object.defineProperties(XMLTag.prototype, {
+    
+})
+
+/*,
     b = {
     get name() {
         return this._name
@@ -146,7 +160,7 @@ Object.defineProperties(XMLTag.prototype, {
     [require('node:util').inspect.custom]: {
         value: Object.getOwnPropertyDescriptor(g, require('node:util').inspect.custom).value
     }
-})
+})*/
 
 module.exports = XMLTag
 

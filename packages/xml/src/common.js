@@ -11,21 +11,17 @@ module.exports.b = function(a) {
 }
 
 module.exports.c = function(a) {
-    Object.keys(a).forEach(function(b) {
-        var c = a[b]
-        a[b] = {
-            configurable: true,
-            enumerable: true,
-            value: c,
-            writable: true
-        }
-    })
+    if ('object' == typeof a)
+        Object.keys(a).forEach(function(b) {
+            a[b] = Object.getOwnPropertyDescriptor(a, b)
+        })
+    return a
 }
 
 module.exports.d = function(a, b) {
     a = '' + a
     if (!a)
-        module.exports.a(a + ' - Name cannot be empty.', b)
+        module.exports.a('Name cannot be empty.', b)
     if (a.indexOf(' ') >- 1) {
         module.exports.b(a + ' - Name cannot contain spaces.')
         a = a.replaceAll(' ', '')
