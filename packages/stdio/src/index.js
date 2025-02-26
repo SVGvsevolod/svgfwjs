@@ -3,7 +3,7 @@
 module.exports.stdin = function stdin(promptHandler) {
     if ('object' == typeof Bun && Bun.stdin instanceof Blob)
         (async function() {
-            for await (const a of Bun.stdin.stream()) {
+            for await (var a of Bun.stdin.stream()) {
                 promptHandler(require('./Prompt')(Buffer.from(a).toString()))
             }
         })()
