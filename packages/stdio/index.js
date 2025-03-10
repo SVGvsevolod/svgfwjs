@@ -22,16 +22,16 @@ function Prompt(input) {
         e = 0,
         f = !!0
     input.matchAll(/(?:-[a-zA-Z])|(?:--[a-zA-Z-_]+(?:=(?:('[^']+')|("[^"]+")))?)/g).forEach(function(a, b) {
-        Object.defineProperty(b, b, {
+        Object.defineProperty(c, b, {
             enumerable: !0,
             value: a[0].split('=')[0]
         })
         if (a[1] || a[2])
-            Object.defineProperty(b, a[0].split('=')[0].substring(2), {
+            Object.defineProperty(c, a[0].split('=')[0].substring(2), {
                 enumerable: !0,
                 value: a[1] ? a[1].substring(1, a[1].length-1) : a[2].substring(1, a[2].length-1)
             })
-        if ('-h' == b[b] || '--help' == b[b] && !f)
+        if ('-h' == c[b] || '--help' == c[b] && !f)
             f = !0
     })
     Object.defineProperties(a, {
@@ -46,14 +46,14 @@ function Prompt(input) {
         parameters: { enumerable: !0, value: d },
         text: { enumerable: !0, value: input }
     })
-    input.matchAll(/(?:'.+')|(?:".+")|(?:\S+)/g).forEach(function(a, c) {
-        if (c && !a.has(a[0].split('=')[0])) {
-            Object.defineProperty(c, e, {
+    input.matchAll(/(?:'.+')|(?:".+")|(?:\S+)/g).forEach(function(b, c) {
+        if (c && !a.has(b[0].split('=')[0])) {
+            Object.defineProperty(d, e, {
                 enumerable: !0,
-                value: '\'' == a[0][0] && '\'' == a[0][a.length-1]
-                    || '"' == a[0][0] && '"' == a[0][a.length-1]
-                    ? a[0].substring(1, a[0].length-1)
-                    : a[0]
+                value: '\'' == b[0][0] && '\'' == b[0][b.length-1]
+                    || '"' == b[0][0] && '"' == b[0][b.length-1]
+                    ? b[0].substring(1, b[0].length-1)
+                    : b[0]
             })
             e++
         }
