@@ -1,3 +1,6 @@
+/**
+ * Categorises user input into structure for easy use in input handling algorithm.
+ */
 export declare interface Prompt {
     /** Shorthand alias to `Prompt.arguments` property */
     readonly args: string[],
@@ -35,10 +38,37 @@ export declare interface Prompt {
 }
 
 /**
+ * Prevent process from being terminated in case if needed to keep active.
+ * @returns {boolean} `true` if hold was set active
+ */
+export declare function hold(): boolean
+
+/** 
+ * Undo process active keeping caused by `Prompt.hold()` and making it 
+ * terminable again.
+ * @returns {boolean} `true` if hold was released
+ */
+export declare function release(): boolean
+
+/**
  * @callback PromptHandler
  * @param {Prompt} prompt
+ * @returns {void}
  */
 export declare type PromptHandler = (prompt: Prompt) => void
+
+/**
+ * Output error. Shorthand function that depends if You running with Node or Bun
+ * uses its stderr stream to output. Can be used whenever some error needed to
+ * output.
+ * @param {*} data
+ * @example
+ * import { err } from '@svgfwjs/err'
+ * import { stderr } from '@svgfwjs/stdio'
+ * 
+ * stderr(err('You broke it, baka!')) 
+ */
+export declare function stderr(data?: any): void
 
 /**
  * Defines handler for input data. Uses depends if You running with Node or Bun
@@ -46,7 +76,7 @@ export declare type PromptHandler = (prompt: Prompt) => void
  * input data to `promptHandler` function.
  * @param {function} promptHandler function that receives `Prompt` object with processed
  * input data where You define how user interacts with application/system.
- * @param {object} opts in which you can set welcome and bye messages
+ * @param {object} opts in which you can set welcome, bye and confirm (termination) messages
  * @example
  * import { stdin } from '@svgfwjs/stdio'
  * 
@@ -59,12 +89,14 @@ export declare type PromptHandler = (prompt: Prompt) => void
  *   }
  * }, {
  *   welcome: '(h)ello world',
- *   bye: 'by.'
+ *   bye: 'by.',
+ *   confirm: '"Are you sure about that?" (type "exit" or "quit" again)'
  * }) 
  */
 export declare function stdin(promptHandler: PromptHandler, opts?: {
     welcome?: string,
-    bye?: string
+    bye?: string,
+    confirm?: string
 }): void
 
 /**
