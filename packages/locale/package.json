@@ -1,0 +1,11 @@
+{
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "name": "@svgfwjs/locale",
+    "repository": {
+        "directory": "packages/locale",
+        "type": "git",
+        "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
+    }
+}
