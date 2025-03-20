@@ -199,6 +199,8 @@ module.exports.stdin = function stdin(promptHandler, opts) {
                     ? opts.bye + ' (C: ' + a + ')\r\n'
                     : opts.bye + ' (C: ' + a + ')')
             })
+        else
+            process.on('exit', function() { stdout('\r\n') })
         process.on('SIGINT', function() {
             d('object' == typeof opts && opts.confirm ? opts.confirm : void 0)
         })
