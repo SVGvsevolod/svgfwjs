@@ -199,13 +199,15 @@ module.exports.stdin = function stdin(promptHandler, opts) {
                     ? opts.bye + ' (C: ' + a + ')\r\n'
                     : opts.bye + ' (C: ' + a + ')')
             })
-        process.on('SIGINT', function() { d(opts.confirm) })
+        process.on('SIGINT', function() {
+            d('object' == typeof opts && opts.confirm ? opts.confirm : void 0)
+        })
         if ('object' == typeof Bun)
             (async function() {
                 for await (var a of Bun.stdin.stream()) {
                     a = '' + Buffer.from(a)
                     if ('exit\nexit\rexit\r\nquit\nquit\rquit\r\n'.indexOf(a) > -1 && a.length > 1)
-                        d(opts.confirm)
+                        d('object' == typeof opts && opts.confirm ? opts.confirm : void 0)
                     else
                         promptHandler(new Prompt(a))
                 }
@@ -214,7 +216,7 @@ module.exports.stdin = function stdin(promptHandler, opts) {
             process.stdin.on('data', function(a) {
                 a = '' + a
                 if ('exit\nexit\rexit\r\nquit\nquit\rquit\r\n'.indexOf(a) > -1 && a.length > 1)
-                    d(opts.confirm)
+                    d('object' == typeof opts && opts.confirm ? opts.confirm : void 0)
                 else
                     promptHandler(new Prompt(a))
             })
