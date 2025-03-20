@@ -26,51 +26,53 @@ function Prompt(input) {
     else {
         var a = this,
             b = /^[a-zA-Z0-9-_]+/.test(input) ? input.match(/^[a-zA-Z0-9-_]+/)[0] : void 0,
-            c = 'object' == typeof Bun ? Object.create(null) : [],
-            d = 'object' == typeof Bun ? Object.create(null) : [],
-            e = 0,
-            f = !!0
-        input.matchAll(/(?:-[a-zA-Z])|(?:--[a-zA-Z-_]+(?:=(?:('[^']+')|("[^"]+")))?)/g).forEach(function(a, b) {
-            Object.defineProperty(c, b, {
+            c = Array.from(input.matchAll(/(?:-[a-zA-Z])|(?:--[a-zA-Z-_]+(?:=(?:('[^']+')|("[^"]+")))?)/g)),
+            d = Array.from(input.matchAll(/(?:'.+')|(?:".+")|(?:\S+)/g)),
+            e = Object.create(null),
+            f = Object.create(null),
+            g = 0,
+            h = !!0
+        for (var i = 0; i < c.length; i++) {
+            Object.defineProperty(e, i, {
                 enumerable: !0,
-                value: a[0].split('=')[0]
+                value: c[i][0].split('=')[0]
             })
-            if (a[1] || a[2])
-                Object.defineProperty(c, a[0].split('=')[0].substring(2), {
+            if (c[i][1] || c[i][2])
+                Object.defineProperty(e, c[i][0].split('=')[0].substring(2), {
                     enumerable: !0,
-                    value: a[1] ? a[1].substring(1, a[1].length-1) : a[2].substring(1, a[2].length-1)
+                    value: c[i][1]
+                        ? c[i][1].substring(1, c[i][1].length - 1)
+                        : c[i][2].substring(1, c[i][2].length - 1)
                 })
-            if ('-h' == c[b] || '--help' == c[b] && !f)
-                f = !0
-        })
+            if ('-h' == e[i] || '--help' == e[i] && !h)
+                h = !0
+        }
         Object.defineProperties(a, {
-            args: { value: d },
-            arguments: { enumerable: !0, value: d },
+            args: { value: f },
+            arguments: { enumerable: !0, value: f },
             cmd: { value: b },
             command: { enumerable: !0, value: b },
-            flags: { enumerable: !0, value: c },
+            flags: { enumerable: !0, value: e },
             input: { enumerable: !0, value: input },
-            isHelp: { enumerable: !0, value: f },
-            options: { enumerable: !0, value: c },
-            parameters: { enumerable: !0, value: d },
+            isHelp: { enumerable: !0, value: h },
+            options: { enumerable: !0, value: e },
+            parameters: { enumerable: !0, value: f },
             text: { enumerable: !0, value: input }
         })
-        input.matchAll(/(?:'.+')|(?:".+")|(?:\S+)/g).forEach(function(b, c) {
-            if (c && !a.has(b[0].split('=')[0])) {
-                Object.defineProperty(d, e, {
+        for (var i = 0; i < d.length; i++) {
+            if (i && !a.has(d[i][0].split('=')[0])) {
+                Object.defineProperty(f, g, {
                     enumerable: !0,
-                    value: '\'' == b[0][0] && '\'' == b[0][b.length-1]
-                        || '"' == b[0][0] && '"' == b[0][b.length-1]
-                        ? b[0].substring(1, b[0].length-1)
-                        : b[0]
+                    value: ('\'' == d[i][0][0] && '\'' == d[i][0][d[i][0].length-1])
+                        || ('"' == d[i][0][0] && '"' == d[i][0][d[i][0].length-1])
+                        ? d[i][0].substring(1, d[i][0].length - 1)
+                        : d[i][0]
                 })
-                e++
+                g++
             }
-        })
-        if ('object' == typeof Bun) {
-            Object.defineProperty(c, 'length', { value: Object.keys(c).length })
-            Object.defineProperty(d, 'length', { value: Object.keys(d).length })
         }
+        Object.defineProperty(e, 'length', { value: Object.keys(e).length })
+        Object.defineProperty(f, 'length', { value: Object.keys(f).length })
     }
 }
 
@@ -86,9 +88,9 @@ function Prompt(input) {
  */
 function stdout(data) {
     if (arguments.length) {
-        if ('object' == typeof Bun)
+        if ('object' == typeof Bun && 'function' == typeof Bun.stdout.write)
             Bun.stdout.write('' + data)
-        else if (process instanceof require('node:events'))
+        else if ('function' == typeof process.stdout.write)
             process.stdout.write('' + data)
     }
 }
@@ -147,10 +149,10 @@ module.exports.Prompt = Prompt
  */
 module.exports.stderr = function stderr(data) {
     if (arguments.length) {
-        if ('object' == typeof Bun)
+        if ('object' == typeof Bun && 'function' == typeof Bun.stderr.write)
             Bun.stderr.write('' + data)
-        else if (process instanceof require('node:events'))
-            process.stdout.write('' + data)
+        else if ('function' == typeof process.stderr.write)
+            process.stderr.write('' + data)
     }
 }
 
@@ -191,16 +193,16 @@ module.exports.stdin = function stdin(promptHandler, opts) {
                 || ('' + opts.welcome).indexOf('\r\n') < 0
                 ? opts.welcome + '\r\n'
                 : '' + opts.welcome)
-        if ('object' == typeof opts && opts.bye)
-            process.on('exit', function(a) {
+        process.on('exit', 'object' == typeof opts && opts.bye
+            ? function(a) {
                 stdout(('' + opts.bye).indexOf('\r') < 0
                     || ('' + opts.bye).indexOf('\n') < 0
                     || ('' + opts.bye).indexOf('\r\n') < 0
                     ? opts.bye + ' (C: ' + a + ')\r\n'
-                    : opts.bye + ' (C: ' + a + ')')
-            })
-        else
-            process.on('exit', function() { stdout('\r\n') })
+                    : opts.bye + '(C: ' + a + ')\r\n')
+            }
+            : function(a) { stdout('(C: ' + a + ')\r\n') }
+        )
         process.on('SIGINT', function() {
             d('object' == typeof opts && opts.confirm ? opts.confirm : void 0)
         })
@@ -214,7 +216,7 @@ module.exports.stdin = function stdin(promptHandler, opts) {
                         promptHandler(new Prompt(a))
                 }
             })()
-        else if (process instanceof require('node:events'))
+        else
             process.stdin.on('data', function(a) {
                 a = '' + a
                 if ('exit\nexit\rexit\r\nquit\nquit\rquit\r\n'.indexOf(a) > -1 && a.length > 1)
