@@ -35,16 +35,16 @@ export declare type ISOLang = string
  * // Depending on which locale was set in 
  * // process.env.locale property
  */
-export declare interface Dict {
+export declare class Dict {
+    constructor(...strings: LocStr[] | Object[])
     /**
      * Adds new localized string to the `Dict`ionary
+     * @param {Dict} dict
      * @param {string} name
      * @param {LocStr | Object} str
      */
-    add: (name: string, str: LocStr | Object) => void
+    static add: (dict: Dict, name?: string, str?: LocStr | Object) => Dict
 }
-
-export declare class Dict implements Dict { constructor(...strings: LocStr[] | Object[]) }
 
 export declare function Dict(...strings: LocStr[] | Object[]): Dict
 
@@ -73,9 +73,9 @@ export declare interface LocStr {
      * @param {ISOLang} ISOLang 
      * @param {string} value 
      */
-    set: (ISOLang: ISOLang, value: string) => void
+    set: (ISOLang: ISOLang, value?: string) => LocStr
 }
 
-export declare class LocStr implements LocStr { constructor(values: Object) }
+export declare class LocStr implements LocStr { constructor(values?: Object) }
 
-export declare function LocStr(value: Object): LocStr
+export declare function LocStr(values?: Object): LocStr

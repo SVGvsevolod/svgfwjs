@@ -1,7 +1,8 @@
 /**
  * Container for localized strings (A `Dict`ionary)
  * @constructor
- * @param {...LocStr} strings
+ * @typedef {Object} Dict
+ * @param {...LocStr} [strings]
  * @returns {Dict}
  * @example
  * import { Dict } from '@svgfwjs/locale'
@@ -32,20 +33,15 @@ function Dict(strings) {
     else {
         var b = Object.keys(a)
         for (var c = 0; c < b.length; c++)
-            this.add(b[c], a[b[c]])
+            Dict.add(this, b[c], a[b[c]])
     }
 }
-
-/**
- * @typedef {Object} LocalizedVariants
- * @prop {string} variant
- */
 
 /**
  * Container for localized variants of string.
  * @constructor
  * @typedef {Object} LocStr
- * @param {LocalizedVariants} values of localized variants
+ * @param {object} [values] of localized variants
  * @returns {LocStr}
  * @example
  * import { LocStr } from '@svgfwjs/locale'
@@ -69,40 +65,40 @@ function LocStr(values) {
     else if ('object' == typeof values) {
         var a = Object.keys(values)
         for (var b = 0; b < a.length; b++)
-            Object.defineProperty(this, a[b], {
-                enumerable: !0,
-                value: values[a[b]]
-            })
+            this.set(a[b], values[a[b]])
     }
 }
 
-Object.defineProperty(Dict.prototype, 'add', {
+Object.defineProperty(Dict, 'add', {
     enumerable: !0,
-    value: function add(name, str) {
-        if (str instanceof LocStr || 'object' == typeof str)
-            Object.defineProperty(this, name, {
+    value: function add(a, b, c) {
+        if (a instanceof Dict
+         && c instanceof LocStr || 'object' == typeof c)
+            Object.defineProperty(a, '' + b, {
                 enumerable: !0,
-                value: str instanceof LocStr
-                    ? str
-                    : new LocStr(str)
+                value: c instanceof LocStr
+                    ? c
+                    : new LocStr(c)
             })
+        return a
     }
 })
 
 Object.defineProperties(LocStr.prototype, {
     set: {
         enumerable: !0,
-        value: function set(ISOLang, value) {
-            if (!this[ISOLang])
-                Object.defineProperty(this, ISOLang, {
+        value: function set(a, b) {
+            if (!this['' + a])
+                Object.defineProperty(this, a, {
                     enumerable: !0,
-                    value: value
+                    value: '' + b
                 })
+            return this
         }
     },
     toString: {
         value: function(a) {
-            return this[a]
+            return this['' + a]
                 || this[process.env.locale]
                 || this[Object.keys(this)[0]]
         }
