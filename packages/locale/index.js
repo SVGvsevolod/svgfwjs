@@ -71,14 +71,19 @@ function LocStr(values) {
 
 Object.defineProperty(Dict, 'add', {
     enumerable: !0,
-    value: function add(a, b, c) {
-        if (a instanceof Dict
-         && c instanceof LocStr || 'object' == typeof c)
-            Object.defineProperty(a, '' + b, {
+    value: function add(c, d, e) {
+        if (!(c instanceof Dict))
+            throw require('@svgfwjs/err')
+                .err(a, Dict.add, TypeError)
+        else if (c['' + d])
+            throw require('@svgfwjs/err')
+                .err(d + b, Dict.add, ReferenceError)
+        else if (e instanceof LocStr || 'object' == typeof e)
+            Object.defineProperty(c, '' + d, {
                 enumerable: !0,
-                value: c instanceof LocStr
-                    ? c
-                    : new LocStr(c)
+                value: e instanceof LocStr
+                    ? e
+                    : new LocStr(e)
             })
         return a
     }
@@ -87,22 +92,34 @@ Object.defineProperty(Dict, 'add', {
 Object.defineProperties(LocStr.prototype, {
     set: {
         enumerable: !0,
-        value: function set(a, b) {
-            if (!this['' + a])
-                Object.defineProperty(this, a, {
+        value: function set(a, c) {
+            if (this['' + a])
+                throw require('@svgfwjs/err')
+                    .err(c + b, Dict.add, ReferenceError)
+            else
+                Object.defineProperty(this, '' + a, {
                     enumerable: !0,
-                    value: '' + b
+                    value: '' + c
                 })
             return this
         }
     },
     toString: {
-        value: function(a) {
+        value: function toString(a) {
             return this['' + a]
                 || this[process.env.locale]
                 || this[Object.keys(this)[0]]
         }
     }
+})
+
+var a = new LocStr({
+    'en_US': 'No valid Dict instance was provided',
+    'ru_RU': 'Не валидный экземпляр интерфейса Dict указан'
+}),
+    b = new LocStr({
+    'en_US': ' is already existing',
+    'ru_RU': ' уже существует'
 })
 
 module.exports.Dict = Dict

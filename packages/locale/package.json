@@ -1,4 +1,9 @@
 {
+    "author": "Vsevolod S.V.G Subbotkin <svgvsevolod@svg.moe> (https://svg.moe/)",
+    "dependencies": {
+        "@svgfwjs/err": "1.0.0"
+    },
+    "description": "Localization String Containers and Dictionary Containers",
     "engines": {
         "node": ">=0.10.0"
     },
@@ -7,5 +12,6 @@
         "directory": "packages/locale",
         "type": "git",
         "url": "git+https://github.com/SVGvsevolod/svgfwjs.git"
-    }
+    },
+    "version": "1.0.0"
 }
